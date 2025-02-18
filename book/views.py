@@ -1,15 +1,22 @@
 from django.db import models
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
+
+from django_filters import rest_framework as django_filters
 
 from .models import Author, Category, Book, Review
 from .serializers import AuthorSerializer, CategorySerializer, BookSerializer, ReviewSerializer
+from .filters import BookFilter
 
 
 class AuthorViewSet(viewsets.ModelViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
+
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ['full_name']
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -22,9 +29,19 @@ class ReviewViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
 
 
+class CustomPagination(PageNumberPagination):
+    page_size = 2
+
+
 class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+
+    pagination_class = CustomPagination  # /api/books/?page=3
+
+    filter_backends = (django_filters.DjangoFilterBackend, filters.SearchFilter)
+    filterset_class = BookFilter
+    search_fields = ['title', 'description']
 
     def list(self, request, *args, **kwargs):
         category = request.query_params.get('category', None)
