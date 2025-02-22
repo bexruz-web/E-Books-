@@ -3,6 +3,7 @@ from rest_framework import viewsets, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticated
 
 from django_filters import rest_framework as django_filters
 
@@ -18,10 +19,14 @@ class AuthorViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ['full_name']
 
+    permission_classes = [IsAuthenticated]
+
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+    permission_classes = [IsAuthenticated]
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
@@ -38,6 +43,8 @@ class BookViewSet(viewsets.ModelViewSet):
     serializer_class = BookSerializer
 
     pagination_class = CustomPagination  # /api/books/?page=3
+
+    permission_classes = [IsAuthenticated]
 
     filter_backends = (django_filters.DjangoFilterBackend, filters.SearchFilter)
     filterset_class = BookFilter
