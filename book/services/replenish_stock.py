@@ -7,6 +7,7 @@ from rest_framework.decorators import api_view
 
 @api_view(['POST'])
 @swagger_auto_schema(operation_description="Admin replenishes stock for a book")
+@staff_member_required()
 def admin_replenish_stock(request, book_id, amount):
     try:
         book = Book.objects.get(id=book_id)
