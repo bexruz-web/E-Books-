@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'djoser',
 
     'book',
+    'billing',
 ]
 
 MIDDLEWARE = [
@@ -161,3 +162,6 @@ CHAT_ID = os.getenv("CHAT_ID")
 
 CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND")
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
+
+STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY")
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
